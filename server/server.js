@@ -5,7 +5,7 @@ const port = 8000
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.sendFile('index.html', {root: __dirname})
 })
 
 let ITEMS = 
@@ -110,3 +110,5 @@ app.delete('/item/:id', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+process.on('SIGINT', function() {process.exit()})
