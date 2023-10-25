@@ -1,4 +1,6 @@
 const express = require('express')
+const path = require('path');
+
 const app = express()
 const port = 8000
 
@@ -6,6 +8,8 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', {root: __dirname})
+    //res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
+
 })
 
 let ITEMS = 
@@ -67,17 +71,11 @@ app.post('/item', (req, res) => {
       "date_from": data['Date From'],
     };
 
-
+    console.log("Item created successfully")
     console.log(orderdFields)
     ITEMS.push(orderdFields)
     res.status(201).json()
-    console.log("Item created successfully")
   }
-})
-
-// Get Items end point
-app.get('/items', (req, res) => {
-  res.json(ITEMS)
 })
 
 
@@ -99,12 +97,48 @@ app.get('/item/:id', (req, res) => {
   res.status(404).json({ error: "Item not found" });
 })
 
+// Get single item by UID
+app.use('/items', (req, res, next) => {
+  //console.log("I will get this in the future " + req.params.id)
+
+  if(req.query.user_id){
+    const uID = ITEMS.find(uID => uID.user_id === req.query.user_id);
+    if (uID) 
+    {
+      console.log("User Found: ")
+      console.log(uID)
+      res.json()
+    }
+    else 
+    {
+      res.json({ error: "User not found" });
+    }
+  }
+  else 
+  {
+    console.log(ITEMS)
+    res.status(200).json()
+  }
+
+  //console.log("Error 404 - Item not found")
+  //res.status(404).json({ error: "Item not found" });
+})
+
 
 // Delete item by ID
 app.delete('/item/:id', (req, res) => {
-  //console.log("I will delete this in the future " + req.params.id)
-  ITEMS = ITEMS.filter((item)=> item.id != req.params.id)
-  res.status(204).json()
+
+  itemToDelete  = parseFloat(req.params.id)
+  const i = ITEMS.findIndex(item => item.id === itemToDelete);
+
+  if (i === -1) 
+  {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+
+  ITEMS.splice(i, 1)
+  console.log("Item Deleted ")
+  return res.status(204).json();
 })
 
 app.listen(port, () => {
