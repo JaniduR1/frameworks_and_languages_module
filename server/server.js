@@ -1,10 +1,11 @@
 const express = require('express')
+const cors = require('cors')
 const path = require('path');
-
 const app = express()
 const port = 8000
 
 app.use(express.json());
+app.use(cors())
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', {root: __dirname})
@@ -33,11 +34,19 @@ let ITEMS =
 
 // POST
 
+function CreateUID() 
+{
+
+  const rand = Math.floor(Math.random() * 10000);
+  return rand;
+}
+
 app.post('/item', (req, res) => {
   //console.log("POST to item")
   //console.log(req.body)
   const dateFrom = new Date().toISOString(); //Current Date From to ISO Format 
-  const id = Math.random() //Generate Random ID
+  const dateTo = new Date().toISOString(); //Current Date From to ISO Format 
+  //const id = Math.random() //Generate Random ID
   const data = req.body
   //data.date_to = dateTo;
 
@@ -52,8 +61,9 @@ app.post('/item', (req, res) => {
   {
 
 
-    data.id = id; //Adds ID field to body and sets it to const id above
-    data['Date From'] = dateFrom; //Creates Date From field
+    //data.id = CreateUID(); //Adds ID field to body and sets it to const id above
+    data['Date From'] = dateFrom; //Date From field
+    data['Date To'] = dateTo; //Date From field
 
     //data["date_from:" ] = dateFrom // Adds Date_From field to body
     //data["id:" ] = id // Adds ID field to body
@@ -61,7 +71,7 @@ app.post('/item', (req, res) => {
     // Format Body Field Order
     const orderdFields = 
     {
-      "id": data.id,
+      "id": CreateUID(),
       "user_id": data.user_id,
       "keywords": data.keywords,
       "description": data.description,
@@ -69,12 +79,13 @@ app.post('/item', (req, res) => {
       "lat": data.lat,
       "lon": data.lon,
       "date_from": data['Date From'],
+      "date_to": data['Date To'],
     };
 
-    console.log("Item created successfully")
-    console.log(orderdFields)
     ITEMS.push(orderdFields)
-    res.status(201).json()
+    //console.log("Item created successfully")
+    //console.log(orderdFields)
+    return res.status(201).json(orderdFields)
   }
 })
 
@@ -87,37 +98,36 @@ app.get('/item/:id', (req, res) => {
     //console.log(i)
     if (item.id == req.params.id)
     {
-      console.log("Successful Operation - Item Found!")
-      console.log(item)
-      res.status(200).json()
-      return;
+      //console.log("Successful Operation - Item Found!")
+      //console.log(item)
+      return res.status(200).json(item)
     }
   }
-  console.log("Error 404 - Item not found")
-  res.status(404).json({ error: "Item not found" });
+  //console.log("Error 404 - Item not found")
+  return res.status(404).json({ error: "Item not found" });
 })
 
 // Get single item by UID
-app.use('/items', (req, res, next) => {
-  //console.log("I will get this in the future " + req.params.id)
+app.get('/items', (req, res, next) => {
 
   if(req.query.user_id){
     const uID = ITEMS.find(uID => uID.user_id === req.query.user_id);
     if (uID) 
     {
-      console.log("User Found: ")
-      console.log(uID)
-      res.json()
+      //console.log("User Found: ")
+      //console.log(uID)
+      //res.json()
+      return res.json(uID)
     }
     else 
     {
-      res.json({ error: "User not found" });
+      return res.json({ error: "User not found" });
     }
   }
   else 
   {
-    console.log(ITEMS)
-    res.status(200).json()
+    //console.log(ITEMS)
+    return res.status(200).json(ITEMS)
   }
 
   //console.log("Error 404 - Item not found")
@@ -137,7 +147,7 @@ app.delete('/item/:id', (req, res) => {
   }
 
   ITEMS.splice(i, 1)
-  console.log("Item Deleted ")
+  //console.log("Item Deleted ")
   return res.status(204).json();
 })
 
