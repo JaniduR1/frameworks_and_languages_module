@@ -1,0 +1,47 @@
+<script type="importmap">
+  {
+    "imports": {
+    "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+    }
+  }
+</script>
+
+<div id="app">
+  {{ message }}
+  <form @submit.prevent="postForm">
+    <input v-model="item.user_id" name="user_id" placeholder="Enter UID"/> {{ item.user_id }}
+    <input v-model="item.keywords" name="keywords" placeholder="Enter Keywords"/> {{ item.keywords }}
+    <input v-model="item.description" name="description" placeholder="Enter Description"/> {{ item.description }}
+    <input v-model="item.image" name="image" placeholder="Image Url"/> {{ item.image }}
+    <input v-model="item.lat" name="lat" placeholder="Enter Latitude"/> {{ item.lat }}
+    <input v-model="item.lon" name="lon" placeholder="Enter Longitude"/> {{ item.lon }}
+
+    <button @click="postForm">Add</button>
+  </form>
+
+</div>
+
+<script type="module">
+import { createApp } from 'vue'
+  
+createApp({
+	data() {return {
+    message: 'Hello Vue!',
+		item: {user_id: '', keywords: '', description: '', image: '', lat: '', lon: ''},
+	}},
+
+  methods: {
+    postForm() {
+      //alert('Form Posted!');
+      console.log(this.item)
+      fetch(`/item`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(this.item),
+      })
+      .then(response => response.json())
+      .then(json => console.log('posted stuff', json))
+      .catch(err => console.error(err));
+  }},
+}).mount('#app')
+</script>
