@@ -31,6 +31,15 @@ createApp({
 	}},
 
   methods: {
+    clearForm(){
+      this.item.user_id = ''
+      this.item.keywords = ''
+      this.item.description = ''
+      this.item.image = ''
+      this.item.lat = ''
+      this.item.lon = ''
+    },
+
     postForm() {
       //alert('Form Posted!');
       console.log(this.item)
@@ -42,6 +51,8 @@ createApp({
       .then(response => response.json())
       .then(json => console.log('posted stuff', json))
       .catch(err => console.error(err));
+
+      this.clearForm()
   }},
 }).mount('#app')
 </script>
