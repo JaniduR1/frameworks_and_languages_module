@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors())
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html', {root: __dirname})
+    res.sendFile('client.html', {root: __dirname})
     //res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
 
 })
@@ -36,7 +36,6 @@ let ITEMS =
 
 function CreateUID() 
 {
-
   const rand = Math.floor(Math.random() * 10000);
   return rand;
 }
@@ -83,8 +82,8 @@ app.post('/item', (req, res) => {
     };
 
     ITEMS.push(orderdFields)
-    //console.log("Item created successfully")
-    //console.log(orderdFields)
+    console.log("Item created successfully")
+    console.log(orderdFields)
     return res.status(201).json(orderdFields)
   }
 })
