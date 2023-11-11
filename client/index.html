@@ -32,56 +32,59 @@
     <form @submit.prevent="postForm">
       <div class="container">
         <div class="row">
+          
           <!--User ID Field-->
           <div class="input-group p-1">
             <div class="input-group-prepend col-2"> 
               <span class="input-group-text" id="inputGroup-sizing-default">User ID</span>
             </div>
-            <input class="form-control" v-model="item.user_id" name="user_id" placeholder="Enter UID"/>
+            <input class="form-control" v-model="item.user_id" name="user_id" placeholder="Enter UID">
           </div>
+
+
           <!--Keywords Field-->
           <div class="input-group p-1">
             <div class="input-group-prepend col-2"> 
               <span class="input-group-text" id="inputGroup-sizing-default">Keywords</span>
             </div>
-            <input class="form-control" v-model="item.keywords" name="keywords" placeholder="Enter Keywords"/>
+            <input class="form-control" v-model="item.keywords" name="keywords" placeholder="Enter Keywords">
           </div>
+
           <!--Description Field-->
           <div class="input-group p-1">
             <div class="input-group-prepend col-2"> 
               <span class="input-group-text" id="inputGroup-sizing-default">Description</span>
             </div>
-            <input class="form-control" v-model="item.description" name="description" placeholder="Enter Description"/>
+            <input type="text" class="form-control" v-model="item.description" name="description" placeholder="Enter Description">
           </div>
+
           <!--Image Field-->
           <div class="input-group p-1">
             <div class="input-group-prepend col-2"> 
               <span class="input-group-text" id="inputGroup-sizing-default">Image</span>
             </div>
-            <input class="form-control" v-model="item.image" name="image" placeholder="Image Url"/>
+            <input class="form-control" v-model="item.image" name="image" placeholder="Image Url">
           </div>
+
           <!--Latitude AND Longitude Fields-->
           <div class="input-group p-1">
             <div class="input-group-prepend col-2"> 
               <span class="input-group-text" id="inputGroup-sizing-default">Latitude</span>
             </div>
-            <input class="form-control" v-model="item.lat" name="lat" placeholder="Enter Latitude"/>
+            <input class="form-control" v-model="item.lat" name="lat" placeholder="Enter Latitude">
+
             <div class="input-group-prepend col-2"> 
               <span class="input-group-text" id="inputGroup-sizing-default">Longitude</span>
             </div>  
-            <input class="form-control" v-model="item.lon" name="lon" placeholder="Enter Longitude"/>
+            <input class="form-control" v-model="item.lon" name="lon" placeholder="Enter Longitude">
           </div>
+
           <!--Button-->
           <div class="mb-4 text-center">
-           <button class="btn btn-primary" data-action="create_item">Create Item</button>
+            <button class="btn btn-primary" data-action="create_item">Create Item</button>
           </div>
-
         </div>
       </div>
-
-      <!--@ Tablet Size-->
-
-
 
     </form>
 

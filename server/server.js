@@ -1,6 +1,5 @@
 const express = require('express')
 const cors = require('cors')
-const path = require('path');
 const app = express()
 const port = 8000
 
@@ -18,7 +17,8 @@ let ITEMS =
   {
     "id": 0,
     "user_id": "user1234",
-    "keywords": [
+    "keywords": 
+    [
       "hammer",
       "nails",
       "tools"
@@ -82,8 +82,8 @@ app.post('/item', (req, res) => {
     };
 
     ITEMS.push(orderdFields)
-    console.log("Item created successfully")
-    console.log(orderdFields)
+    //console.log("Item created successfully")
+    //console.log(orderdFields)
     return res.status(201).json(orderdFields)
   }
 })
