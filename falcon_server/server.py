@@ -36,7 +36,7 @@ class PostItem:
         else:
             date_from = datetime.datetime.utcnow().isoformat()
             date_to = datetime.datetime.utcnow().isoformat()
-            item_id = random.randint(1,100000)
+            item_id = (random.randint(1,100)*random.randint(1,100))
 
             data['id'] = item_id
             data['Date From'] = date_from
@@ -64,11 +64,11 @@ class GetItemID:
 
         itemID = int(id)
 
-        for i in ITEMS:
-            if i['id'] == itemID:
+        for i in ITEMS: # iterate through each item in ITEMS
+            if i['id'] == itemID: # Check if requested ID matches an ID in ITEMS
                 found = i
-                resp.media = found
-                resp.status = falcon.HTTP_200
+                resp.media = found # Returns the found item
+                resp.status = falcon.HTTP_200 # Return successful 200
                 break
             else:
                 resp.media = {'error': 'Item not found'}
@@ -81,11 +81,33 @@ class GetItems:
         resp.media = ITEMS
         resp.status = falcon.HTTP_200
 
+
+class DeleteItem:
+    def on_delete(self, req, resp, id):
+        itemID = int(id)
+        i = -1 # Sets i to -1 to begin with
+
+        # Go through ITEMS to find the item's index
+        for j, item in enumerate(ITEMS):
+            if item['id'] == itemID:
+                i = j # Sets i to now store the index of item
+                break
+        
+        if i == -1: # If i = -1 from start error
+            resp.media = {'error': 'Item not found'}
+            resp.status = falcon.HTTP_404
+        else:
+            ITEMS.pop(i) # If item is found Delete
+            resp.status = falcon.HTTP_204
+
+
+
 app = falcon.App()
 
 app.add_route('/item', PostItem()) # POST Endpoint
 app.add_route('/items', GetItems()) # Get All Items
-app.add_route('/item/{id}', GetItemID()) # Get Item By ID
+#app.add_route('/item/{id}', GetItemID()) # Get Item By ID
+app.add_route('/item/{id}', DeleteItem()) # Delete Item By ID
 
 if __name__ == '__main__':
     with make_server('', 8000, app) as httpd:
