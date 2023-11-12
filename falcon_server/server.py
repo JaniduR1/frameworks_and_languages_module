@@ -3,8 +3,7 @@ import json
 import datetime
 import random
 from wsgiref.simple_server import make_server
-
-
+## Need CORS
 
 ITEMS = [
       {
@@ -59,6 +58,21 @@ class PostItem:
             ITEMS.append(ordered_fields)
             resp.status = falcon.HTTP_201
 
+# Getting Item by ID
+class GetItemID: 
+    def on_get(self, req, resp, id):
+
+        itemID = int(id)
+
+        for i in ITEMS:
+            if i['id'] == itemID:
+                found = i
+                resp.media = found
+                resp.status = falcon.HTTP_200
+                break
+            else:
+                resp.media = {'error': 'Item not found'}
+                resp.status = falcon.HTTP_404
 
 # Getting All Items
 class GetItems: 
@@ -69,8 +83,9 @@ class GetItems:
 
 app = falcon.App()
 
-app.add_route('/items', GetItems())
-app.add_route('/item', PostItem())
+app.add_route('/item', PostItem()) # POST Endpoint
+app.add_route('/items', GetItems()) # Get All Items
+app.add_route('/item/{id}', GetItemID()) # Get Item By ID
 
 if __name__ == '__main__':
     with make_server('', 8000, app) as httpd:
