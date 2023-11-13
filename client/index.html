@@ -30,6 +30,7 @@
     <!--{{ message }}-->
     <h2>Create</h2>
     <form @submit.prevent="postForm">
+
       <div class="container">
         <div class="row">
           
@@ -83,6 +84,7 @@
           <div class="mb-4 text-center">
             <button class="btn btn-primary" data-action="create_item">Create Item</button>
           </div>
+
         </div>
       </div>
 
@@ -95,7 +97,8 @@
             <div class="card">
                 <img :src="item.image" class="card-img-top">
                 <div class="card-body p-2">
-                    <div class="card-title h3"><span data-field="user_id">User ID: {{item.user_id}}</span></div>
+                    <div class="card-title h3"><span data-field="id">ID: {{item.id}}</span></div>
+                    <div class="card-title h4"><span data-field="user_id">User ID: {{item.user_id}}</span></div>
                     <div class="card-text h5"><span data-field="keywords">Keywords: {{item.keywords}}</span></div>
                     <div class="card-text text-body-secondary"><span data-field="description">Description: {{item.description}}</span></div>
                     <div class="card-text h5 text-body-secondary"><span data-field="lat">Latitude: {{item.lat}}</span></div>
@@ -108,6 +111,7 @@
         </div>
       </li>
     </ul>
+    
   </div>
 
   <script type="module">
