@@ -2,8 +2,14 @@ import falcon
 import json
 import datetime
 import random
+from falcon_cors import CORS
 from wsgiref.simple_server import make_server
-## Need CORS
+
+cors = CORS(
+    allow_all_origins=True,
+    allow_all_headers=True,
+    allow_all_methods=True,
+)
 
 ITEMS = [
       {
@@ -34,8 +40,8 @@ class PostItem:
             resp.media = {'Error 405': 'Invalid input - Some input fields are missing.'}
             resp.status = falcon.HTTP_405
         else:
-            date_from = datetime.datetime.utcnow().isoformat()
-            date_to = datetime.datetime.utcnow().isoformat()
+            date_from = datetime.datetime.now().isoformat()
+            date_to = datetime.datetime.now().isoformat()
             item_id = (random.randint(1,100)*random.randint(1,100))
 
             data['id'] = item_id
@@ -58,8 +64,9 @@ class PostItem:
             ITEMS.append(ordered_fields)
             resp.status = falcon.HTTP_201
 
-# Getting Item by ID
-class GetItemID: 
+
+# Getting Item by ID AND Deleting by ID
+class ItemsResource:
     def on_get(self, req, resp, id):
 
         itemID = int(id)
@@ -73,17 +80,9 @@ class GetItemID:
             else:
                 resp.media = {'error': 'Item not found'}
                 resp.status = falcon.HTTP_404
-
-# Getting All Items
-class GetItems: 
-    def on_get(self, req, resp, **kwargs):
-
-        resp.media = ITEMS
-        resp.status = falcon.HTTP_200
-
-
-class DeleteItem:
+    
     def on_delete(self, req, resp, id):
+
         itemID = int(id)
         i = -1 # Sets i to -1 to begin with
 
@@ -101,13 +100,22 @@ class DeleteItem:
             resp.status = falcon.HTTP_204
 
 
+class GetItems: 
+    def on_get(self, req, resp, **kwargs):
+
+        resp.media = ITEMS
+        resp.status = falcon.HTTP_200
+
+
 
 app = falcon.App()
+app = falcon.App(middleware=[cors.middleware])
 
 app.add_route('/item', PostItem()) # POST Endpoint
 app.add_route('/items', GetItems()) # Get All Items
-#app.add_route('/item/{id}', GetItemID()) # Get Item By ID
-app.add_route('/item/{id}', DeleteItem()) # Delete Item By ID
+app.add_route('/item/{id}', ItemsResource()) # Get AND Delete Item By ID
+#app.add_route('/item/{id}', DeleteItem()) # Delete Item By ID
+
 
 if __name__ == '__main__':
     with make_server('', 8000, app) as httpd:
