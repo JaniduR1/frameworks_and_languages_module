@@ -11,6 +11,18 @@ cors = CORS(
     allow_all_methods=True,
 )
 
+
+## Returns a HTML page at start: https://stackoverflow.com/a/34827474
+class StaticResource:
+    def on_options(self, req, resp):
+            resp.status = falcon.HTTP_204
+            resp.set_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS') # Set the header to allow GET, POST, OPTIONS methods, https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers, https://portswigger.net/web-security/cors/access-control-allow-origin
+
+    def on_get(self, req, resp):
+        resp.content_type = 'text/html'
+        with open('client.html', 'r') as f:
+            resp.body = f.read()
+
 ITEMS = [
       {
         "id": 0,
@@ -33,7 +45,6 @@ ITEMS = [
 # Post an Item to ITEMS list
 class PostItem:
     def on_post(self, req, resp):
-
         data = json.loads(req.bounded_stream.read().decode('utf-8'))
 
         if data.get("user_id") is None or data.get("keywords") is None or data.get("description") is None or data.get("lat") is None or data.get("lon") is None:
@@ -60,7 +71,8 @@ class PostItem:
                 "date_to": data.get('Date To'),
             }
 
-            print(ordered_fields)
+            #print(ordered_fields)
+            resp.media = ordered_fields
             ITEMS.append(ordered_fields)
             resp.status = falcon.HTTP_201
 
@@ -68,7 +80,6 @@ class PostItem:
 # Getting Item by ID AND Deleting by ID
 class ItemsResource:
     def on_get(self, req, resp, id):
-
         itemID = int(id)
 
         for i in ITEMS: # iterate through each item in ITEMS
@@ -82,7 +93,6 @@ class ItemsResource:
                 resp.status = falcon.HTTP_404
     
     def on_delete(self, req, resp, id):
-
         itemID = int(id)
         i = -1 # Sets i to -1 to begin with
 
@@ -100,17 +110,20 @@ class ItemsResource:
             resp.status = falcon.HTTP_204
 
 
-class GetItems: 
-    def on_get(self, req, resp, **kwargs):
+class GetItems:
+    def on_options(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', '*') # Set the header to allow GET, POST, OPTIONS methods, https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
 
+    def on_get(self, req, resp, **kwargs):
         resp.media = ITEMS
         resp.status = falcon.HTTP_200
 
 
 
-app = falcon.App()
-app = falcon.App(middleware=[cors.middleware])
+#app = falcon.App()
+app = falcon.App(middleware=[cors.middleware]) # Initialize the Falcon application with CORS middleware enabled - https://github.com/lwcolton/falcon-cors#usage
 
+app.add_route('/', StaticResource()) # Start
 app.add_route('/item', PostItem()) # POST Endpoint
 app.add_route('/items', GetItems()) # Get All Items
 app.add_route('/item/{id}', ItemsResource()) # Get AND Delete Item By ID
