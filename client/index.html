@@ -92,20 +92,18 @@
 
     <h2>Items</h2>
     <ul>
-      <li v-for="item of list">
-        <div class="card-group m-5" style="width: 350px;">
-            <div class="card">
-                <img :src="item.image" class="card-img-top">
-                <div class="card-body p-2">
-                    <div class="card-title h3"><span data-field="id">ID: {{item.id}}</span></div>
-                    <div class="card-title h4"><span data-field="user_id">User ID: {{item.user_id}}</span></div>
-                    <div class="card-text h5"><span data-field="keywords">Keywords: {{item.keywords}}</span></div>
-                    <div class="card-text text-body-secondary"><span data-field="description">Description: {{item.description}}</span></div>
-                    <div class="card-text h5 text-body-secondary"><span data-field="lat">Latitude: {{item.lat}}</span></div>
-                    <div class="card-text h5 text-body-secondary"><span data-field="lat">Longitude: {{item.lon}}</span></div>
-                    <div class="card-footer text-center">
-                        <button class="btn btn-danger" data-action="delete" @click="deleteItem(item.id)">Delete</button>
-                    </div>
+      <li v-for="item of list" class="col-lg-4 col-md-6 col-sm-12">
+        <div class="card m-2">
+            <img :src="item.image" class="card-img-top img-fluid">
+            <div class="card-body">
+                <div class="card-title h3"><span data-field="id">ID: {{item.id}}</span></div>
+                <div class="card-title h4"><span data-field="user_id">User ID: {{item.user_id}}</span></div>
+                <div class="card-text h5"><span data-field="keywords">Keywords: {{item.keywords}}</span></div>
+                <div class="card-text text-body-secondary"><span data-field="description">Description: {{item.description}}</span></div>
+                <div class="card-text h5 text-body-secondary"><span data-field="lat">Latitude: {{item.lat}}</span></div>
+                <div class="card-text h5 text-body-secondary"><span data-field="lat">Longitude: {{item.lon}}</span></div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-danger" data-action="delete" @click="deleteItem(item.id)">Delete</button>
                 </div>
             </div>
         </div>
