@@ -10,6 +10,7 @@ function App() {
         <div className='App'>
             <Navbar />
             <div className='content'>
+                <h2>Create</h2>
                 <Form />
             </div>
         </div>
