@@ -1,28 +1,20 @@
 //Custom Hook for Get Items
-import { useState, useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 
-const useGet = (url) => {
-    const [formData, setFormData] = useState(null);
-
-
-    useEffect(() => {
-        fetch(url)
-        .then(res => 
-            {
-            if(!res.ok) {
-                throw Error('Connection Error: ')
-            }
-            return res.json();
+const useGet = (url)=>{
+    const [formData, setFormData] = useState([]);
+    useEffect(()=>{
+        axios.get(url)
+        .then((resp)=>{
+            console.log(resp.data)
+            setFormData(resp.data)
         })
-
-        .then(formData => {
-            setFormData(formData);
-        })
-        .catch(e => {
-            console.log(e.message);
-        })
-    }, [url]);
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+    }, [url])
 
     return { formData }
 }

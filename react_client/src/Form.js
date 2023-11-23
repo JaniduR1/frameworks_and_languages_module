@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import useGet from './useGet';
-import axios from 'axios'
-
-/*
-Axios is a very widely used JS library that is known for its 
+import ListView from './ListView';
+import axios from 'axios' /* Axios is a very widely used JS library that is known for its 
 ability to handle HTTP requests. 
 */
 
@@ -22,6 +20,8 @@ const Form = () => {
     const [lat, setLat] = useState('');
     const [lon, setLon] = useState('');
 
+    const {formData} = useGet(`${urlAPI}/items`)
+
     const handleSubmit = (e) => {
         e.preventDefault()
         const form = { user_id, keywords, description, image, lat, lon };
@@ -30,8 +30,10 @@ const Form = () => {
         .then((response) => {
             console.log("New form Added")
             console.log(response)
+            console.log(formData)
+            console.log(JSON.stringify(formData, null, 2));
+
         })
-        
 
         // const form = { userID, keywords, description, image, lat, lon };
         // console.log(form)
@@ -46,6 +48,19 @@ const Form = () => {
         //     console.log(form)
         // })
     }
+    const [items, setItems] = useState([]);
+
+    const handleDelete = (id) => {
+        axios.delete(`${urlAPI}/item/${id}`)
+          .then(() => {
+            // Remove the item from the state
+            setItems(items.filter(item => item.id !== id));
+          })
+          
+          .catch(error => {
+            console.error('Error deleting item:', error);
+          });
+      };
 
     return (
         <div className="form">
@@ -100,9 +115,12 @@ const Form = () => {
                 <p>{description}</p>
                 <p>{image}</p>
                 <p>{lat}</p>
-                <p>{lon}</p>
+
+                
+
             </form>
             <button onClick={handleSubmit}>Post</button>
+            <ListView items={formData} onDelete={handleDelete} />
         </div>
     );
 }
