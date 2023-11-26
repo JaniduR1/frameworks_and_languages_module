@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import useGet from './useGet';
 import ListView from './ListView';
-import axios from 'axios' /* Axios is a very widely used JS library that is known for its 
+import useItemOperations from './useItemOperations';
+//import axios from 'axios' 
+/* Axios is a very widely used JS library that is known for its 
 ability to handle HTTP requests. 
 */
 
@@ -20,20 +21,39 @@ const Form = () => {
     const [lat, setLat] = useState('');
     const [lon, setLon] = useState('');
 
-    const {formData} = useGet(`${urlAPI}/items`)
+    const { items, postForm, deleteItem } = useItemOperations(`${urlAPI}`);
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const form = { user_id, keywords, description, image, lat, lon };
-        console.log(form)
-        axios.post(`${urlAPI}/item`, form)
-        .then((response) => {
-            console.log("New form Added")
-            console.log(response)
-            console.log(formData)
-            console.log(JSON.stringify(formData, null, 2));
+    //const {formData} = useGet(`${urlAPI}/items`)
 
-        })
+
+    //Clearing the Form
+    const clearForm = () => {
+        setUserID('');
+        setKeywords('');
+        setDescription('');
+        setImage('');
+        setLat('');
+        setLon('');
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault(); // Prevent the default form submit behavior
+
+        const newItem = {
+            user_id,
+            keywords,
+            description,
+            image,
+            lat,
+            lon
+        };
+
+        postForm(newItem).then(() => {
+            clearForm(); // Clear form fields after successful submission
+        }).catch(err => {
+            // Handle any posting errors here
+            console.error('Posting Error Dumbass: ', err);
+        });
 
         // const form = { userID, keywords, description, image, lat, lon };
         // console.log(form)
@@ -47,20 +67,16 @@ const Form = () => {
         //     console.log("New form Added")
         //     console.log(form)
         // })
-    }
-    const [items, setItems] = useState([]);
+    };
 
-    const handleDelete = (id) => {
-        axios.delete(`${urlAPI}/item/${id}`)
-          .then(() => {
-            // Remove the item from the state
-            setItems(items.filter(item => item.id !== id));
-          })
-          
-          .catch(error => {
-            console.error('Error deleting item:', error);
-          });
-      };
+
+    // const handleDelete = (id) => {
+    //     axios.delete(`${urlAPI}/item/${id}`)
+    //       .then(() => { 
+    //         fetchItems();
+    //         })
+    //         .catch(err => console.error(err))
+    //   };
 
     return (
         <div className="form">
@@ -120,7 +136,7 @@ const Form = () => {
 
             </form>
             <button onClick={handleSubmit}>Post</button>
-            <ListView items={formData} onDelete={handleDelete} />
+            <ListView items={items} onDelete={deleteItem} />
         </div>
     );
 }
