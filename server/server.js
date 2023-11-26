@@ -109,25 +109,49 @@ app.get('/item/:id', (req, res) => {
 // Get single item by UID
 app.get('/items', (req, res, next) => {
 
-  if(req.query.user_id){
-    const uID = ITEMS.find(uID => uID.user_id === req.query.user_id);
-    if (uID) 
-    {
-      //console.log("User Found: ")
-      //console.log(uID)
-      //res.json()
-      return res.json(uID)
-    }
-    else 
-    {
-      return res.json({ error: "User not found" });
-    }
-  }
-  else 
+  let requestedItem = []; // Empty array to hold a filtered user requested item like filterd by UID
+
+  for (item of ITEMS) 
   {
-    //console.log(ITEMS)
-    return res.status(200).json(ITEMS)
+    //Sets the default value that each item is included, will be changed acordingly by the if statements below
+    let containsItem = true;
+
+
+    //Filter by user_id
+    /// When querying by user ID if the uID doesn't match the item's user_id the exclude the item.
+    if (req.query.user_id && item.user_id !== req.query.user_id) {
+      containsItem = false;
+    }
+
+    // Filter by keywords
+    ///Need to implement
+
+    if (containsItem) {
+      requestedItem.push(item);
+    }
   }
+
+  return res.status(200).json(requestedItem);
+
+  // if(req.query.user_id){
+  //   const uID = ITEMS.find(uID => uID.user_id === req.query.user_id);
+  //   if (uID) 
+  //   {
+  //     //console.log("User Found: ")
+  //     //console.log(uID)
+  //     //res.json()
+  //     return res.json(uID)
+  //   }
+  //   else 
+  //   {
+  //     return res.json({ error: "User not found" });
+  //   }
+  // }
+  // else 
+  // {
+  //   //console.log(ITEMS)
+  //   return res.status(200).json(ITEMS)
+  // }
 
   //console.log("Error 404 - Item not found")
   //res.status(404).json({ error: "Item not found" });
