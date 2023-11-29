@@ -81,61 +81,106 @@ const Form = () => {
     return (
         <div className="form">
             <form>
-                <label>UserID: </label>
-                <input
-                    type="text"
-                    required
-                    value={user_id}
-                    onChange={(event) => setUserID(event.target.value)}
-                />
 
-                <label>Keywords: </label>
-                <input
-                    type="text"
-                    required
-                    value={keywords}
-                    onChange={(event) => setKeywords(event.target.value)}
-                />
+                <div className='md:flex md:items-center mb-6'>
+                    <div className='md:w-1/3'>
+                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="UserID">UserID: </label>
+                    </div>
+                    <div className='md:w-1/3'>
+                        <input
+                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                            type="text"
+                            required
+                            value={user_id}
+                            onChange={(event) => setUserID(event.target.value)}
+                        />
+                    </div>
+                </div>
 
-                <label>Description: </label>
-                <textarea
-                    required
-                    value={description}
-                    onChange={(event) => setDescription(event.target.value)}
-                ></textarea>
+                <div className='md:flex md:items-center mb-6'>
+                    <div className='md:w-1/3'>
+                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Keywords">Keywords: </label>
+                    </div>
+                    <div className='md:w-1/3'>
+                        <input
+                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                            type="text"
+                            required
+                            value={keywords}
+                            onChange={(event) => setKeywords(event.target.value)}
+                        />
+                    </div>
+                </div>
 
-                <label>Image: </label>
-                <input
-                    type="text"
-                    value={image}
-                    onChange={(event) => setImage(event.target.value)}
-                />
+                <div className='md:flex md:items-center mb-6'>
+                    <div className='md:w-1/3'>
+                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Description">Description: </label>
+                    </div>
+                    <div className='md:w-1/3'>
+                        <textarea
+                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                            required
+                            value={description}
+                            onChange={(event) => setDescription(event.target.value)}
+                        ></textarea>
+                    </div>
+                </div>
 
-                <label>Lat: </label>
-                <input
-                    type="number"
-                    required
-                    value={lat}
-                    onChange={(event) => setLat(event.target.value)}
-                />
+                <div className='md:flex md:items-center mb-6'>
+                    <div className='md:w-1/3'>
+                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Image">Image: </label>
+                    </div>
+                    <div className='md:w-1/3'>
+                        <input
+                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                            type="text"
+                            value={image}
+                            onChange={(event) => setImage(event.target.value)}
+                        />
+                    </div>
+                </div>
 
-                <label>Lon: </label>
-                <input
-                    type="number"
-                    required
-                    value={lon}
-                    onChange={(event) => setLon(event.target.value)}
-                />
+                <div className='md:flex md:items-center mb-6'>
+                    <div className='md:w-1/3'>
+                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Latitude">Latitude: </label>
+                    </div>
+                    <div className='md:w-1/3'>
+                        <input
+                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                            type="number"
+                            required
+                            value={lat}
+                            onChange={(event) => setLat(event.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className='md:flex md:items-center mb-6'>
+                    <div className='md:w-1/3'>
+                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Longitude">Longitude: </label>
+                    </div>
+                    <div className='md:w-1/3'>
+                        <input
+                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                            type="number"
+                            required
+                            value={lon}
+                            onChange={(event) => setLon(event.target.value)}
+                        />
+                    </div>
+                </div>
                 <p>{user_id}</p>
                 <p>{keywords}</p>
                 <p>{description}</p>
                 <p>{image}</p>
                 <p>{lat}</p>
 
-                
-
             </form>
-            <button onClick={handleSubmit}>Post</button>
+
+            <div className='flex items-center justify-center'>
+                <button className='bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-xl focus:shadow-outline" type="button' onClick={handleSubmit}>Post</button>
+            </div>
+
             <ListView items={items} onDelete={deleteItem} />
         </div>
     );
