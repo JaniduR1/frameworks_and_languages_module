@@ -35,6 +35,7 @@ const useItemOperations = (urlAPI) => {
 
     useEffect(() => {
         getItems();
+// eslint-disable-next-line
     }, [urlAPI]);
 
 

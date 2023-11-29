@@ -7,6 +7,7 @@ COPY package.json .
 RUN npm install
 
 #RUN npm install axios
+#npm install react-scripts
 
 COPY . .
 
