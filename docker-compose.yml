@@ -4,7 +4,8 @@ services:
 
   server:
     build:
-      context: ./server/
+      context: ./falcon_server/
+      #context: ./server/
     expose:
       - 8000
     ports:
