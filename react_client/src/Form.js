@@ -79,96 +79,77 @@ const Form = () => {
     //   };
 
     return (
-        <div className="form">
+        <div className='form'>
             <form>
+                <div className='md:flex md:justify-center'>
+                    <div className='space-y-8 p-3 w-full md:w-1/2'>
+                        <div className='flex flex-col md:flex-row items-center'>
+                            <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="UserID">UserID: </label>
+                            <input
+                                className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                type="text"
+                                required
+                                value={user_id}
+                                onChange={(event) => setUserID(event.target.value)}
+                            />
+                        </div>
 
-                <div className='md:flex md:items-center mb-6'>
-                    <div className='md:w-1/3'>
-                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="UserID">UserID: </label>
-                    </div>
-                    <div className='md:w-1/3'>
-                        <input
-                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
-                            type="text"
-                            required
-                            value={user_id}
-                            onChange={(event) => setUserID(event.target.value)}
-                        />
+                        <div className='flex flex-col md:flex-row items-center'>
+                            <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Keywords">Keywords: </label>
+                            <input
+                                className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                type="text"
+                                required
+                                value={keywords}
+                                onChange={(event) => setKeywords(event.target.value)}
+                            />
+                        </div>
+
+                        <div className='flex flex-col md:flex-row items-center'>
+                            <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Description">Description: </label>
+                            <textarea
+                                className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                required
+                                value={description}
+                                onChange={(event) => setDescription(event.target.value)}
+                            ></textarea>
+                        </div>
+
+                        <div className='flex flex-col md:flex-row items-center'>
+                            <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Image">Image: </label>
+                            <input
+                                className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                type="text"
+                                value={image}
+                                onChange={(event) => setImage(event.target.value)}
+                            />
+                        </div>
+
+                        <div className='flex flex-col md:flex-row items-center'>
+                            <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Latitude">Latitude: </label>
+                            <input
+                                className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                type="number"
+                                required
+                                value={lat}
+                                onChange={(event) => setLat(event.target.value)}
+                            />
+                        </div>
+
+                        <div className='flex flex-col md:flex-row items-center'>
+                            <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Longitude">Longitude: </label>
+                            <input
+                                className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                type="number"
+                                required
+                                value={lon}
+                                onChange={(event) => setLon(event.target.value)}
+                            />
+                        </div>
+
                     </div>
                 </div>
 
-                <div className='md:flex md:items-center mb-6'>
-                    <div className='md:w-1/3'>
-                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Keywords">Keywords: </label>
-                    </div>
-                    <div className='md:w-1/3'>
-                        <input
-                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
-                            type="text"
-                            required
-                            value={keywords}
-                            onChange={(event) => setKeywords(event.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className='md:flex md:items-center mb-6'>
-                    <div className='md:w-1/3'>
-                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Description">Description: </label>
-                    </div>
-                    <div className='md:w-1/3'>
-                        <textarea
-                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
-                            required
-                            value={description}
-                            onChange={(event) => setDescription(event.target.value)}
-                        ></textarea>
-                    </div>
-                </div>
-
-                <div className='md:flex md:items-center mb-6'>
-                    <div className='md:w-1/3'>
-                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Image">Image: </label>
-                    </div>
-                    <div className='md:w-1/3'>
-                        <input
-                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
-                            type="text"
-                            value={image}
-                            onChange={(event) => setImage(event.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className='md:flex md:items-center mb-6'>
-                    <div className='md:w-1/3'>
-                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Latitude">Latitude: </label>
-                    </div>
-                    <div className='md:w-1/3'>
-                        <input
-                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
-                            type="number"
-                            required
-                            value={lat}
-                            onChange={(event) => setLat(event.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className='md:flex md:items-center mb-6'>
-                    <div className='md:w-1/3'>
-                        <label className='block font-bold md:text-right mb-1 md:mb-0 pr-4' for="Longitude">Longitude: </label>
-                    </div>
-                    <div className='md:w-1/3'>
-                        <input
-                            className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
-                            type="number"
-                            required
-                            value={lon}
-                            onChange={(event) => setLon(event.target.value)}
-                        />
-                    </div>
-                </div>
                 <p>{user_id}</p>
                 <p>{keywords}</p>
                 <p>{description}</p>
@@ -176,12 +157,17 @@ const Form = () => {
                 <p>{lat}</p>
 
             </form>
+        
+        
 
             <div className='flex items-center justify-center'>
                 <button className='bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-xl focus:shadow-outline" type="button' onClick={handleSubmit}>Post</button>
             </div>
 
-            <ListView items={items} onDelete={deleteItem} />
+            <div>
+                <ListView items={items} onDelete={deleteItem} />
+            </div>
+
         </div>
     );
 }
