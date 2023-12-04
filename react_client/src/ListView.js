@@ -7,8 +7,8 @@ const ListView = ({ items, onDelete }) => {
             <ul>
                 {items.map(item => (
                 <li className='py-3' key={item.id}>
-                    <div className='max-w-sm rounded overflow-hidden shadow-lg p-2'>
-                        <img className='w-full' src={item.image} alt={item.image} />
+                    <div className='max-w-xs rounded overflow-hidden shadow-lg p-2'>
+                        <img className='w-20' src={item.image} alt={item.image} />
                         <div className='px-6 py-4'>
 
                             <div className='font-bold text-xl mb-2'>
