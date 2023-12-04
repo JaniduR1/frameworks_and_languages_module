@@ -13,32 +13,32 @@ const ListView = ({ items, onDelete }) => {
 
                             <div className='font-bold text-xl mb-2'>
                                 {/* <span data-field="id">ID: {item.id}</span> */}
-                                <span className='underline' data-field="id">ID</span><span>: {item.id}</span>
+                                <span className='underline'>ID</span>:<span data-field="id">{item.id}</span>
                             </div>
 
                             <p className='text-gray-700 text-base p-1'>
                                 {/* <span data-field="user_id">User ID: {item.user_id}</span> */}
-                                <span className='underline' data-field="user_id">User ID</span><span>: {item.user_id}</span>
+                                <span className='underline'>User ID</span>:<span data-field="user_id">{item.user_id}</span>
                             </p>
 
                             <p className='text-gray-700 text-base p-1'>
                                 {/* <span data-field="keywords">Keywords: {item.keywords}</span> */}
-                                <span className='underline' data-field="keywords">Keywords</span><span>: {item.keywords}</span>
+                                <span className='underline'>Keywords</span>:<span data-field="keywords">{item.keywords}</span>
                             </p>
 
                             <p className='text-gray-700 text-base p-1'>
                                 {/* <span data-field="description">Description: {item.description}</span> */}
-                                <span className='underline' data-field="description">Description</span><span>: {item.description}</span>
+                                <span className='underline'>Description</span>:<span data-field="description">{item.description}</span>
                             </p>
 
                             <p className='text-gray-700 text-base p-1'>
                                 {/* <span data-field="lat">Latitude: {item.lat}</span> */}
-                                <span className='underline' data-field="lat">Latitude</span><span>: {item.lat}</span>
+                                <span className='underline'>Latitude</span>:<span data-field="lat">{item.lat}</span>
                             </p>
 
                             <p className='text-gray-700 text-base p-1'>
                                 {/* <span data-field="lon">Longitude: {item.lon}</span> */}
-                                <span className='underline' data-field="lon">Longitude</span><span>: {item.lon}</span>
+                                <span className='underline'>Longitude</span>:<span data-field="lon">{item.lon}</span>
                             </p>
 
                         </div>

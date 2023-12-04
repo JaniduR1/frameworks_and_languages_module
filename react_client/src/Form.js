@@ -87,6 +87,7 @@ const Form = () => {
                             <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="UserID">UserID: </label>
                             <input
                                 className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                name='user_id'
                                 type="text"
                                 required
                                 value={user_id}
@@ -98,6 +99,7 @@ const Form = () => {
                             <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Keywords">Keywords: </label>
                             <input
                                 className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                name='keywords'
                                 type="text"
                                 required
                                 value={keywords}
@@ -109,6 +111,7 @@ const Form = () => {
                             <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Description">Description: </label>
                             <textarea
                                 className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                name='description'
                                 required
                                 value={description}
                                 onChange={(event) => setDescription(event.target.value)}
@@ -119,6 +122,7 @@ const Form = () => {
                             <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Image">Image: </label>
                             <input
                                 className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                name='image'
                                 type="text"
                                 value={image}
                                 onChange={(event) => setImage(event.target.value)}
@@ -129,6 +133,7 @@ const Form = () => {
                             <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Latitude">Latitude: </label>
                             <input
                                 className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                name='lat'
                                 type="number"
                                 required
                                 value={lat}
@@ -140,6 +145,7 @@ const Form = () => {
                             <label className='block font-bold pr-4 mb-2 md:mb-0 md:w-32' htmlFor="Longitude">Longitude: </label>
                             <input
                                 className='appearance-none border-black border-4 rounded w-full py-2 px-4 leading-tight focus:border-blue-900'
+                                name='lon'
                                 type="number"
                                 required
                                 value={lon}
@@ -161,7 +167,7 @@ const Form = () => {
         
 
             <div className='flex items-center justify-center'>
-                <button className='bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-xl focus:shadow-outline" type="button' onClick={handleSubmit}>Post</button>
+                <button className='bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-xl focus:shadow-outline' type='button' data-action="create_item" onClick={handleSubmit}>Post</button>
             </div>
 
             <div>
