@@ -1,16 +1,18 @@
-FROM node:16
+FROM node:alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json .
 
 RUN npm install
 
 #RUN npm install axios
-RUN npm install react-scripts
+#RUN npm install react-scripts
 
 COPY . .
 
 EXPOSE 8001
 
-CMD ["npm", "run", "start"]
+ENV PORT=8001
+
+CMD ["npm", "start"]

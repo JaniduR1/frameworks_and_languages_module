@@ -1,5 +1,11 @@
 DOCKER_IMAGE:=client
 
+run_local: node_modules
+	PORT=8001 npm start
+
+node_modules:
+	npm install
+
 build:
 	docker build --tag ${DOCKER_IMAGE} .
 

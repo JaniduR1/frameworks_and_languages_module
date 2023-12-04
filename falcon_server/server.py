@@ -61,10 +61,7 @@ class PostItem:
                 keywords = [keyword.strip() for keyword in keywordsList.split(',')] # Split by ,
             else:
                 keywords = keywordsList
-
-
-
-
+                
             date_from = datetime.datetime.now().isoformat()
             date_to = datetime.datetime.now().isoformat()
             item_id = (random.randint(1,100)*random.randint(1,100))
