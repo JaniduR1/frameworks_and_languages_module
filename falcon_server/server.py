@@ -51,6 +51,20 @@ class PostItem:
             resp.media = {'Error 405': 'Invalid input - Some input fields are missing.'}
             resp.status = falcon.HTTP_405
         else:
+
+            keywordsList = data.get("keywords")
+            
+            #If the keyword is a string, https://www.w3schools.com/python/ref_func_isinstance.asp
+            if isinstance(keywordsList, str):
+                
+                #https://docs.python.org/2/library/stdtypes.html#str.strip, https://stackoverflow.com/a/8270146 - Remove white spaces.
+                keywords = [keyword.strip() for keyword in keywordsList.split(',')] # Split by ,
+            else:
+                keywords = keywordsList
+
+
+
+
             date_from = datetime.datetime.now().isoformat()
             date_to = datetime.datetime.now().isoformat()
             item_id = (random.randint(1,100)*random.randint(1,100))
@@ -62,7 +76,7 @@ class PostItem:
             ordered_fields = {
                 "id": data.get('id'),
                 "user_id": data.get('user_id'),
-                "keywords": data.get('keywords'),
+                "keywords": keywords,
                 "description": data.get('description'),
                 "image": data.get('image'),
                 "lat": data.get('lat'),
