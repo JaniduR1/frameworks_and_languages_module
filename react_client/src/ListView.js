@@ -6,10 +6,10 @@ const ListView = ({ items, onDelete }) => {
             </div>
             <ul>
                 {items.map(item => (
-                <li className='py-3' key={item.id}>
-                    <div className='max-w-xs rounded overflow-hidden shadow-lg p-2'>
-                        <img className='w-20' src={item.image} alt={item.image} />
-                        <div className='px-6 py-4'>
+                <li className='py-2' key={item.id}>
+                    <div className='max-w-sm rounded overflow-hidden shadow-lg p-1'>
+                        <img className='w-16' src={item.image} alt={item.image} />
+                        <div className='px-4 py-2'>
 
                             <div className='font-bold text-xl mb-2'>
                                 {/* <span data-field="id">ID: {item.id}</span> */}
@@ -42,8 +42,8 @@ const ListView = ({ items, onDelete }) => {
                             </p>
 
                         </div>
-                        <div className='px-6 pt-4 pb-2 text-center'>
-                            <button className='bg-transparent font-semibold py-2 px-4 border border-black rounded hover:bg-rose-700 hover:text-white' data-action="delete" onClick={() => onDelete(item.id)}>Delete</button>
+                        <div className='px-4 pt-2 pb-1 text-center'>
+                            <button className='bg-transparent font-semibold py-1 px-2 border border-black rounded hover:bg-rose-700 hover:text-white' data-action="delete" onClick={() => onDelete(item.id)}>Delete</button>
                         </div>
                     </div>
                 </li>
