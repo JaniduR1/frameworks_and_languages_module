@@ -9,7 +9,7 @@ const useItemOperations = (urlAPI) => {
         .then(() => {
             getItems(); // To Refresh
         })
-        .catch(err => {console.error('Youre a Dumbass: ', err);
+        .catch(err => {console.error('Post item error: ', err);
         });
     };
 
@@ -19,7 +19,7 @@ const useItemOperations = (urlAPI) => {
             .then(response => {
                 setItems(response.data);
             })
-            .catch(err => {console.error('Youre a Dumbass: ', err);
+            .catch(err => {console.error('Get items error: ', err);
         });
     };
 
@@ -29,7 +29,7 @@ const useItemOperations = (urlAPI) => {
             .then(() => {
                 getItems(); // To Refresh
             })
-            .catch(err => {console.error('Youre a Dumbass: ', err);
+            .catch(err => {console.error('Delete item error: ', err);
         });
     };
 

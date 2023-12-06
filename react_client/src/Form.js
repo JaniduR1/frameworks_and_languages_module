@@ -52,7 +52,7 @@ const Form = () => {
             clearForm(); // Clear form fields after successful submission
         }).catch(err => {
             // Handle any posting errors here
-            console.error('Posting Error Dumbass: ', err);
+            console.error(err);
         });
 
         // const form = { userID, keywords, description, image, lat, lon };

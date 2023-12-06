@@ -126,41 +126,41 @@ class GetItems:
         resp.set_header('Access-Control-Allow-Origin', '*') # Set the header to allow GET, POST, OPTIONS methods, https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
 
     def on_get(self, req, resp, **kwargs):
-        # uidQuery = req.get_param('user_id')
-        # dateFromQuery = req.get_param('date_from')
+        uidQuery = req.get_param('user_id')
+        dateFromQuery = req.get_param('date_from')
 
-        # requestedItem = [] # Empty array to hold a filtered user requested item like filterd by UID
+        requestedItem = [] # Empty array to hold a filtered user requested item like filterd by UID
 
-        # for item in ITEMS:
-        #     # Sets the default values, will be changed acordingly by the if statements below
-        #     containsItem = True
-
-
-        #     # Filter by UserID
-        #     if uidQuery and item['user_id'] != uidQuery:
-        #         containsItem = False
-
-        #     ## Filter by date_from
-        #     if containsItem and dateFromQuery:
-        #         # Convert the date_from's to 'datetime' for comparison
-        #         itemsDateFrom = datetime.datetime.fromisoformat(item['date_from'].replace('Z', '')) # Remove Z at the end
-        #         queryDateFrom = datetime.datetime.fromisoformat(dateFromQuery.replace('Z', '')) # Remove Z at the end
-
-        #         # Checks if the items date_from is earlier than the date_from query date, set to false
-        #         if itemsDateFrom < queryDateFrom:
-        #             containsItem = False
+        for item in ITEMS:
+            # Sets the default values, will be changed acordingly by the if statements below
+            containsItem = True
 
 
-        #     ## Filter by keywords
-        #     ### Need to implement
+            # Filter by UserID
+            if uidQuery and item['user_id'] != uidQuery:
+                containsItem = False
 
-        #     # Add item to the requestedItem list if it passes the filters
-        #     if containsItem:
-        #         requestedItem.append(item)
-        #resp.media = requestedItem
+            ## Filter by date_from
+            if containsItem and dateFromQuery:
+                # Convert the date_from's to 'datetime' for comparison
+                itemsDateFrom = datetime.datetime.fromisoformat(item['date_from'].replace('Z', '')) # Remove Z at the end
+                queryDateFrom = datetime.datetime.fromisoformat(dateFromQuery.replace('Z', '')) # Remove Z at the end
+
+                # Checks if the items date_from is earlier than the date_from query date, set to false
+                if itemsDateFrom < queryDateFrom:
+                    containsItem = False
 
 
-        resp.media = ITEMS
+            ## Filter by keywords
+            ### Need to implement
+
+            # Add item to the requestedItem list if it passes the filters
+            if containsItem:
+                requestedItem.append(item)
+        resp.media = requestedItem
+
+
+        #resp.media = ITEMS
         resp.status = falcon.HTTP_200
 
 

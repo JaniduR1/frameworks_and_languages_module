@@ -127,17 +127,17 @@ app.get('/items', (req, res, next) => {
     ///Need to implement
 
     // Filter by date_from
-    if (containsItem && req.query.date_from) 
-    {
-      const dateFromQuery = new Date(req.query.date_from);
-      const itemDate = new Date(item.date_from);
+    // if (containsItem && req.query.date_from) 
+    // {
+    //   const dateFromQuery = new Date(req.query.date_from);
+    //   const itemDate = new Date(item.date_from);
   
-      // If the items date_from is earlier than the date_from queryes date, set to false
-      if (itemDate < dateFromQuery) 
-      {
-        containsItem = false;
-      }
-    }
+    //   // If the items date_from is earlier than the date_from queryes date, set to false
+    //   if (itemDate < dateFromQuery) 
+    //   {
+    //     containsItem = false;
+    //   }
+    // }
 
     if (containsItem) 
     {

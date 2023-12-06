@@ -4,8 +4,8 @@ services:
 
   server:
     build:
-      #context: ./falcon_server/
-      context: ./server/
+      context: ./falcon_server/
+      #context: ./express_server/
     expose:
       - 8000
     ports:
@@ -14,7 +14,7 @@ services:
 
   client:
     build:
-      #context: ./client/
+      #context: ./vue_client/
       context: ./react_client/
     expose:
       - 8001
