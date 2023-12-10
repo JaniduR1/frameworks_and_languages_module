@@ -224,7 +224,7 @@ def test_ids_generated_are_unique(ENDPOINT, new_item, get_items, item_factory):
     assert new_item['id'] not in ids, 'id fields should be unique and not reused from previous deleted items'
 
 
-@pytest.mark.skip(reason="optional functionality not used by client")
+#@pytest.mark.skip(reason="optional functionality not used by client")
 def test_items_filter_username(get_items, item_factory):
     for i in range(6):
         item_factory(user_id=f"user{i//2}")
@@ -243,7 +243,7 @@ def test_items_filter_location(get_items, item_factory):
     assert len(items) == 3, "should return lat=100 + lat=100.1 + lat=100.2"
 
 
-@pytest.mark.skip(reason="optional functionality not used by client")
+#@pytest.mark.skip(reason="optional functionality not used by client")
 def test_items_filter_date_from(get_items, item_factory):
     for i in range(2):
         item_factory()

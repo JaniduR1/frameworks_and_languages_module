@@ -1,5 +1,8 @@
 DOCKER_IMAGE:=server
 
+run_local:
+	python server.py
+
 build:
 	docker build --tag falcon_server .
 

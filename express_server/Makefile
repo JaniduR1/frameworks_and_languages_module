@@ -1,5 +1,8 @@
 DOCKER_IMAGE:=server
 
+run_local:
+	node server.js
+
 build:
 	docker build --tag ${DOCKER_IMAGE} .
 
