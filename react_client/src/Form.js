@@ -14,6 +14,7 @@ const urlAPI = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
 
 
 const Form = () => {
+    // The useState hook is used to manage state within the functional component - https://react.dev/learn/typescript#typing-usestate
     const [user_id, setUserID] = useState('');
     const [keywords, setKeywords] = useState('');
     const [description, setDescription] = useState('');
@@ -35,7 +36,7 @@ const Form = () => {
         setLat('');
         setLon('');
     };
-
+    // Handles form submission using the preventDefault method in order to prevent the default form submit behaviour - https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
     const handleSubmit = (event) => {
         event.preventDefault(); // Prevent the default form submit behavior
 
@@ -81,6 +82,7 @@ const Form = () => {
     return (
         <div className='form'>
             <form>
+                {/* For medium screens and larger, use use flex layout and center items */}
                 <div className='md:flex md:justify-center'>
                     <div className='space-y-8 p-3 w-full md:w-1/2'>
                         <div className='flex flex-col md:flex-row items-center'>
@@ -92,6 +94,7 @@ const Form = () => {
                                 required
                                 value={user_id}
                                 onChange={(event) => setUserID(event.target.value)}
+                                // Form element with event handler for updating the state (implementing two-way data binding) - https://react.dev/learn/thinking-in-react#step-5-add-inverse-data-flow
                             />
                         </div>
 
@@ -164,6 +167,7 @@ const Form = () => {
             </div>
 
             <div>
+                {/* React Composition, the smaller List view component is included in larger Form one - https://felixgerschau.com/react-component-composition/ */}
                 <ListView items={items} onDelete={deleteItem} />
             </div>
 
