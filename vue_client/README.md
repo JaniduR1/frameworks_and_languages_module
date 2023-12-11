@@ -23,7 +23,7 @@ To run the client in a container run the command, *cd* in to the server director
  - Note  - If you run make build once you do not need to run it again unless you make changes to the files therefor just run the command `make run` after it.
 
 ## Connect Server to Client
-If you wish to connect to a server please make the server and client port visibilities public and at the end of the client url add *?api=* and the url of the server. 
+If you wish to connect to a server please run and make the server and client port visibilities public and at the end of the client url add `?api=` and the url of the server. 
 - Note - It should look similar to this: *`https://client-8001.app.github.dev/?api=https://server-8000.app.github.dev/`*
 
 ## Find a bug?

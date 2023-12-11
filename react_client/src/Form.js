@@ -155,13 +155,6 @@ const Form = () => {
 
                     </div>
                 </div>
-
-                <p>{user_id}</p>
-                <p>{keywords}</p>
-                <p>{description}</p>
-                <p>{image}</p>
-                <p>{lat}</p>
-
             </form>
         
         

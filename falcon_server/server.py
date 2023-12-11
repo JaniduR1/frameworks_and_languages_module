@@ -1,9 +1,9 @@
-import falcon
-import json
-import datetime
-import random
-from falcon_cors import CORS
-from wsgiref.simple_server import make_server
+import falcon # Importing Falcon framework: https://falcon.readthedocs.io/en/stable/
+import json # Importing json module for JSON data handling: https://docs.python.org/3/library/json.html
+import datetime # Datetime module for date-time operations: h   ttps://docs.python.org/3/library/datetime.html
+import random # Random module for generating random numbers: https://docs.python.org/3/library/random.html
+from falcon_cors import CORS # Importing CORS middleware for Falcon: https://github.com/lwcolton/falcon-cors
+from wsgiref.simple_server import make_server # Importing WSGI server functionality
 
 cors = CORS(
     allow_all_origins=True,
@@ -13,16 +13,18 @@ cors = CORS(
 
 
 ## Returns a HTML page at start: https://stackoverflow.com/a/34827474
-class StaticResource:
+class StaticResource: # Define a class for static resources handling in Falcon.
     def on_options(self, req, resp):
             resp.status = falcon.HTTP_204
             resp.set_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS') # Set the header to allow GET, POST, OPTIONS methods, https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers, https://portswigger.net/web-security/cors/access-control-allow-origin
 
-    def on_get(self, req, resp):
+    def on_get(self, req, resp): # Overriding the on_get method for GET request handling.
         resp.content_type = 'text/html'
-        with open('client.html', 'r') as f:
+        resp.status = falcon.HTTP_200
+        with open('client.html', 'r') as f: # Context manager for file operations: https://book.pythontips.com/en/latest/context_managers.html#context-managers
             resp.body = f.read()
 
+# Initialise a list
 ITEMS = [
       {
         "id": 0,
@@ -159,7 +161,6 @@ class GetItems:
                 requestedItem.append(item)
         resp.media = requestedItem
 
-
         #resp.media = ITEMS
         resp.status = falcon.HTTP_200
 
@@ -176,7 +177,7 @@ app.add_route('/item/{id}', ItemsResource()) # Get AND Delete Item By ID
 
 
 if __name__ == '__main__':
-    with make_server('', 8000, app) as httpd:
+    with make_server('', 8000, app) as httpd: # WSGI server functionality
         print('Serving on port 8000...')
 
         # Serve until process is killed
