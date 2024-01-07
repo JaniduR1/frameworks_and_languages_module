@@ -8,21 +8,38 @@ Critique of Server/Client prototype
 ---------------------
 
 ### Overview
-()
+The existing prototypes `example_server` and `example_client` are rudimentary versions that lack the saleability, robustness, and security required for the business of the application. Below are two of many issues with the current prototype and technical reasons why considering implementing a framework would be beneficial for the business.
 
-### (name of Issue 1)
+### Inadequate Error Handling
 
-(A code snippet example demonstrating the issue)
-(Explain why this pattern is problematic - 40ish words)
+`example_server/app/server.py`
+```python
+def app(request):
+    request = decode_json_request(request)
 
-### (name of Issue 2)
+    if _func := find_route_func(request, ROUTES):
+        return _func(request)
 
-(A code snippet example demonstrating the issue)
-(Explain why this pattern is problematic - 40ish words)
+    return {'code': 404, 'body': 'no route'}
+```
+The error handling in the server code is basic as it simply returns a 404 response for any unspecified route. From a business perspective, this could negatively impact the user experience and as it leads to insufficient logging for administrators, it would complicate the debugging process for developers ultimately taking more time to fix an issue related to this.
+
+### Absent Middleware Support
+`example_server/app/server.py`
+```Python
+def app(request):
+    # Middleware
+    request = decode_json_request(request)
+    if _func := find_route_func(request, ROUTES):
+        return _func(request)
+```
+
+Not implementing middleware in the server reduces its scaleability, hinders its performance, and overall limits the application's functionality. With the application having deficiencies such as these the application would ultimately fail to meet client and business needs/demands. Introducing a framework that has middleware support would help develop a robust, scalable, and more secure application for the business.
 
 ### Recommendation
-(why the existing implementation should not be used - 40ish words)
-(suggested direction - frameworks 40ish words)
+As shown above, the current `example_server` and `example_client` prototypes are not fit for business-grade applications as they lack the scalability and robustness needed from such applications. The issues with error handling and the absence of middleware are two of many issues with the prototypes. To meet the evolving business needs more efficiently, rebuilding the application with the use of frameworks would be the best-recommended approach.
+
+Frameworks such as Falcon or Flask for the server side and React or Vue.js for the client provide not only solutions to the issues addressed above but also improve the scalability of the application and the overall performance of the application. To demonstrate this, I have rebuilt the application with the use of Falcon and React and have justified the benefits, reasons, and key features of both frameworks.
 
 
 
@@ -56,16 +73,7 @@ https://www.geeksforgeeks.org/python-falcon-routing/
 Falcons webSocket support facilitates persistant bidirectional communication for real time client updates. This could be useful for prompting users with new information, for example, when a product that matches their query becomes available. This provides an application that can push data to a list of users who are listning to a perticular area and can be notified through websocket. 
 `falcon_server/server.py`
 ```python
-import falcon
-#...
-from wsgiref.simple_server import make_server
-#...
-if __name__ == '__main__':
-    with make_server('', 8000, app) as httpd:
-        print('Serving on port 8000...')
-
-        # Serve until process is killed
-        httpd.serve_forever()
+###_
 ```
 However, while this would make a good proof of concept, webSocket may face scalability issues with Python in handling numerous concurrent connections, therefor with large scale applications, integrating with external brokers like MQTT for managing real-time data flow can be a more scalable solution.
 https://www.geeksforgeeks.org/python-falcon-wsgi-vs-asgi/
