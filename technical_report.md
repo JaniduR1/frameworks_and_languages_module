@@ -8,46 +8,60 @@ Critique of Server/Client prototype
 ---------------------
 
 ### Overview
+
 The existing prototypes `example_server` and `example_client` are rudimentary versions that lack the saleability, robustness, and security required for the business of the application. Below are two of many issues with the current prototype and technical reasons why considering implementing a framework would be beneficial for the business.
 
-### Inadequate Error Handling
+### Manual State Management & DOM Manipulation
 
-`example_server/app/server.py`
-```python
-def app(request):
-    request = decode_json_request(request)
+`example_client/index.html`
+```javascript
+function renderItems(data) {
+		const $item_list = document.querySelector(`[data-page="items"] ul`);
+		const new_item_element = () => document.querySelector(`[data-page="items"] li`).cloneNode(true);
 
-    if _func := find_route_func(request, ROUTES):
-        return _func(request)
-
-    return {'code': 404, 'body': 'no route'}
+		for (let item_data of data) {
+			const $new_item_element = new_item_element();
+			$item_list.appendChild($new_item_element);
+			renderDataToTemplate(item_data, $new_item_element, renderItemListFieldLookup);
+			attachDeleteAction($new_item_element);
+		}
+	}
 ```
-The error handling in the server code is basic as it simply returns a 404 response for any unspecified route. From a business perspective, this could negatively impact the user experience and as it leads to insufficient logging for administrators, it would complicate the debugging process for developers ultimately taking more time to fix an issue related to this.
+The client's manual state management and DOM manipulation results in code that is difficult to maintain espically as applications get larger, this method is contaminating rendering with DOM changes and is making the code significantly less scalable which is not benifitial for a business application.
 
-### Absent Middleware Support
+
+
+### Cumbersome Routing
+
 `example_server/app/server.py`
 ```Python
-def app(request):
-    # Middleware
-    request = decode_json_request(request)
-    if _func := find_route_func(request, ROUTES):
-        return _func(request)
+from .views import get_index, get_item, post_item, delete_item, get_items
+ROUTES = (
+    ('OPTIONS', r'.*', options_response),
+    ('GET', r'/$', get_index),
+    ('POST', r'/item$', post_item),
+    ('GET', r'/item/(?P<id>\d+)$', get_item),
+    ('DELETE', r'/item/(?P<id>\d+)$', delete_item),
+    ('GET', r'/items$', get_items),
+)
 ```
-
-Not implementing middleware in the server reduces its scaleability, hinders its performance, and overall limits the application's functionality. With the application having deficiencies such as these the application would ultimately fail to meet client and business needs/demands. Introducing a framework that has middleware support would help develop a robust, scalable, and more secure application for the business.
+The servers routing is defined globally and in a single location using regular expressions, this method lacks saleability and flexibility making the application difficult to manage and expand.
 
 ### Recommendation
-As shown above, the current `example_server` and `example_client` prototypes are not fit for business-grade applications as they lack the scalability and robustness needed from such applications. The issues with error handling and the absence of middleware are two of many issues with the prototypes. To meet the evolving business needs more efficiently, rebuilding the application with the use of frameworks would be the best-recommended approach.
+
+As shown above, the current `example_server` and `example_client` prototypes are not fit for business-grade applications as they lack the scalability and robustness needed from such applications. The issues with manual state management and cumbersome routing are two of many issues with the prototypes. To meet the evolving business needs more efficiently, rebuilding the application with the use of frameworks would be the best-recommended approach.
 
 Frameworks such as Falcon or Flask for the server side and React or Vue.js for the client provide not only solutions to the issues addressed above but also improve the scalability of the application and the overall performance of the application. To demonstrate this, I have rebuilt the application with the use of Falcon and React and have justified the benefits, reasons, and key features of both frameworks.
-
 
 
 Server Framework Features
 -------------------------
 
 ### Simple Routing
+
 Falcon's routing mechanism demonstrates an efficient approach to URL management. This significantly streamlines the development process, enhancing both the readability and maintainability of application code. By abstracting intricate routing patterns, Falcon promotes accelerated development cycles and facilitates improved navigability within the codebase.
+https://falcon.readthedocs.io/en/stable/api/routing.html
+
 `falcon_server/server.py`
 ```python
 app = falcon.App()
@@ -64,19 +78,21 @@ if __name__ == '__main__':
         httpd.serve_forever()
 ```
 However, while Falcon's simplicity offers benefits for rapid prototyping and development of smaller applications, it is critical to acknowledge that more complex, larger scale projects may require further customisation. Ensuring optimal performance and organisational rationality in those scenarios might require integrating more sophisticated routing solutions to meet the demands of these complex applications. 
-
-https://falcon.readthedocs.io/en/stable/api/routing.html
 https://www.geeksforgeeks.org/python-falcon-routing/
+https://dev.to/m4cs/creating-a-rest-api-with-mongodb-and-the-falcon-framework-python-5i6
 
 
 ### WebSocket support
-Falcons webSocket support facilitates persistant bidirectional communication for real time client updates. This could be useful for prompting users with new information, for example, when a product that matches their query becomes available. This provides an application that can push data to a list of users who are listning to a perticular area and can be notified through websocket. 
+
+Falcons webSocket support facilitates persistant bidirectional communication for real time client updates. This could be useful for prompting users with new information, for example, when a product that matches their query becomes available. This provides an application that can push data to a list of users who are listning to a perticular area and can be notified through websocket.
+#Important
+https://www.geeksforgeeks.org/python-falcon-wsgi-vs-asgi/
+https://www.tutorialspoint.com/python_falcon/python_falcon_tutorial.pdf
 `falcon_server/server.py`
 ```python
-###_
+
 ```
-However, while this would make a good proof of concept, webSocket may face scalability issues with Python in handling numerous concurrent connections, therefor with large scale applications, integrating with external brokers like MQTT for managing real-time data flow can be a more scalable solution.
-https://www.geeksforgeeks.org/python-falcon-wsgi-vs-asgi/
+However, while this would make a good proof of concept, webSocket may face scalability issues with Python in handling numerous concurrent connections, therefore with large scale applications, integrating with external brokers like MQTT for managing real-time data flow can be a more scalable solution.
 https://www.geeksforgeeks.org/what-is-web-socket-and-how-it-is-different-from-the-http/
 https://mqtt.org/
 
@@ -84,6 +100,9 @@ https://mqtt.org/
 ### Request and response objects
 
 Falcon uses the inversion of control (IoC) pattern to simplify the processing of HTTP requests and responses by giving developers direct access to headers and bodies through 'req (request)' and 'resp (response)' objects which encapsulates a wide range of functionalities for managing HTTP connections. This allows developers to easily manipulate HTTP requests and outgoing responses.
+https://falcon.readthedocs.io/en/stable/api/request_and_response.html
+https://www.tutorialspoint.com/python_falcon/python_falcon_request_and_response.htm
+
 
 `falcon_server/server.py`
 ```python
@@ -102,27 +121,73 @@ class ItemsResource:
 ```
 
 However, while these objects simplify HTTP interactions and encourage clean, maintainable code, in specialised scenarios which requires irregular handling of HTTP requests and responses they may introduce constraints. For applications with unique architectural requirements this feature could be impacting performance or developer overhead as the abstraction provided by Falcon might demand additional layers. Therefore, utilising proxy services that can handle a high-volume of transactions may be beneficial, resulting in maintaining the performance of the application while leveraging Falcon's streamlined request and response handling which guarantees scalability and flexibility.
+https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
+https://www.cloudflare.com/learning/performance/types-of-load-balancing-algorithms/
+https://www.digitalocean.com/community/conceptual-articles/introduction-to-proxies
 
 
 
 Server Language Features
 -----------------------
 
-### Interpreted Language
+### Dynamic Data Structure Handling
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+Python makes handling dynamic data structures easier allowing developers to create and manipulate lists, dictionaries, and other data structures more easily, and because of its versatile and straightforward data structure syntax that closely resembles JSON for smooth data representation and manipulation you can create intricate nested structures without using extensive declarations, unlike a static language.
+https://www.dataquest.io/blog/data-structures-in-python/
 
+`falcon_server/server.py`
+```python
+ITEMS = [
+      {
+        "id": 0,
+        "user_id": "user1234",
+        "keywords": 
+        [
+        "hammer",
+        "nails",
+        "tools"
+        ],
+        #...
+        "lat": 51.2798438,
+        "lon": 1.0830275,
+        "date_from": "2023-10-20T22:57:05.814Z",
+        "date_to": "2023-10-20T22:57:05.814Z"
+  }
+]
 
-### (name of Feature 2)
+class PostItem:
+    def on_post(self, req, resp):
+        #...
+        ordered_fields = {
+                "id": data.get('id'),
+                "user_id": data.get('user_id'),
+                "keywords": keywords,
+                #...
+            }
+```
+This feature of python is a great tool for web applications because not only does it speed up development it also improves the readability/maintainability of the code as it enables developers to express complicated data in a straightforward manner. However, while this is a very powerful feature for web applications if it is not handled appropriately, it may result in runtime issues.
+https://docs.python.org/3/library/json.html
+https://docs.python.org/3/tutorial/datastructures.html?highlight=data%20structures
+https://www.danielmorell.com/blog/dynamically-calling-functions-in-python-safely
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+### Large Standard Library
 
+Pythons `batteries included` viewpoint provides developers with a wide range of tools within its standard library. Having this extentive library in python provides pre built modules for a large number of functionalities.
+https://docs.python.org/3/library/
+https://www.computer.org/csdl/magazine/cs/2007/03/c3007/13rRUzpQPH7
+
+`falcon_server/server.py`
+```python
+import datetime
+import random
+
+class PostItem:
+    def on_post(self, req, resp):
+        data = json.loads(req.bounded_stream.read().decode('utf-8'))
+        # ...
+        date_from = datetime.datetime.now().isoformat()
+```
+This feature streamlines web application development and helps with rapid prototyping by offering out of the box solutions for common tasks and reduces dependency management. 
 
 
 Client Framework Features
@@ -131,9 +196,11 @@ Client Framework Features
 ### Custom Hooks
 
 Custom hooks are a feature used for extracting component logic into reusable functions. Within the application built, the `useItemOperations.js` custom hook encapsulates API interactions, providing functionalities like posting new items, fetching items, and deleting items.
+https://legacy.reactjs.org/docs/hooks-custom.html
+https://www.w3schools.com/react/react_customhooks.asp
 
 `react_client/src/useItemOperations.js`
-```react(js)
+```javascript
 const useItemOperations = (urlAPI) => {
     // State and Axios calls for item operations
     const [items, setItems] = useState([]);
@@ -142,13 +209,18 @@ const useItemOperations = (urlAPI) => {
     return { items, getItems, postForm, deleteItem };
 };
 ```
-However, while custom hooks are aid in making more maintainable and readable code, thsey introduce an additional layer of abstraction which may obscure the direct data flow for new developers, therefor it is cruital to have documentation and clear naming conventions to maintain clarity in the application's structure.
+Custom hooks in React aim to simplify logic reuse and enhances component readability in applications. However, while this aids in making more maintainable code, thsey introduce an additional layer of abstraction which may obscure the direct data flow for new developers, therefore it is cruital to have documentation and clear naming conventions to maintain clarity in the application's structure.
+https://dev.to/adevnadia/why-custom-react-hooks-could-destroy-your-app-performance-nid
+https://richbray.medium.com/hot-take-react-hooks-are-bad-for-your-code-heres-why-d95410d07402
 
 ### One-Way Data Binding
+
 In React one way data binding refers to the unidirectional data flow pattern where the application's data is managed by means of the state and the UI is rendered as a function of this state. This consequently promotes predictable data flow and enhanced performance by minimising direct DOM manipulations.
+https://www.geeksforgeeks.org/reactjs-unidirectional-data-flow/
+https://dev.to/parnikagupta/one-way-data-binding-in-react-30ea
 
 `react_client/src/useItemOperations.js`
-```javascript react(js)
+```javascript
 const Form = () => {
     const [user_id, setUserID] = useState('');
 
@@ -168,63 +240,88 @@ const Form = () => {
 ```
 
 React's one-way data binding makes the connection between the user interface and the underlying data simpler. It guarantees a single source of truth by showing components as a function of state, which makes state management predictable. However, when passing data through several nested children components, problems can arise, especially with complex applications and deep component trees when passing down props. With complex applications, state management libraries like Redux can help manage and distribute state more efficiently therefore preventing prop passing and maintaining a manageable code structure.
-
-https://www.geeksforgeeks.org/reactjs-unidirectional-data-flow/
-https://dev.to/parnikagupta/one-way-data-binding-in-react-30ea
 https://www.educative.io/answers/what-is-unidirectional-data-flow-in-react
 https://blog.logrocket.com/understanding-redux-tutorial-examples/
 
 ### Component Based Architecture
 
-In React, components composition is where components are built using smaller and reusable pieces, therefore encapsulating their structure and logic. This promotes maintainability and reusability allowing complex UIs to be made from separated components.
+In React, components composition is where components are built using smaller and reusable pieces, therefore encapsulating their structure and logic.
+https://nandbox.com/all-you-need-to-know-about-component-based-architecture/
 
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
-
+`react_client/src/App.js`
+```Javascript
+function App() {
+    return (
+        //<h1 className='text-7xl text-center text-blue-400'>Hello World</h1>
+        <div className='App'>
+            <Navbar />
+            <div className='content'>
+                <h2 className='text-4xl font-bold'>Create</h2>
+                <Form />
+            </div>
+        </div>
+    
+    );
+}
+```
+React's component based architecture solves the problem of code reusability and maintainability by breaking the UI into reusable components which simplifies the development process and enhances the application's scalability which is particularly useful in large scale business web applications.
 https://legacy.reactjs.org/docs/composition-vs-inheritance.html
-https://www.freecodecamp.org/news/avoid-prop-drilling-in-react/#:~:text=What%20is%20Prop%20Drilling%3F,component%20that%20finally%20consumes%20it.
-
+https://medium.com/@dan.shapiro1210/understanding-component-based-architecture-3ff48ec0c238
+https://handsonreact.com/docs/component-architecture
 
 
 Client Language Features
 ------------------------
 
-### Event Handling
-
-In JavaScript, Event handling allows for the interaction with HTML elements through actions performed by a user such as clicks or keyboard input. Registering event listeners allows developers to define responsive behaviours, therefore enabling interactive and dynamic web applications, It is fundamental in DOM manipulation and UI updates.
-
+### Arrow Functions
+Arrow functions which were introduced in ES6 provides developers with a concise syntax for writing function expression, which allow for shorter syntax and binds the value lexically making them useful for callbacks where a clear scope is critical.
+https://www.w3schools.com/js/js_es6.asp
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 `react_client/src/Form.js`
 ```JavaScript
-<button onClick={handleSubmit}>Post</button>
-
-function handleSubmit(event) {
-    event.preventDefault(); // Prevents default button action
-    // Submission logic here
+const useItemOperations = (urlAPI) => {
+    // ...
+    const postForm = (form) => {
+        return axios.post(`${urlAPI}/item`, form)
+        .then(() => {
+            getItems(); // To Refresh
+        })
+    // ...
 }
 ```
-However, while event handling promotes interactive and dynamic web applications, improper event handling can lead to performance issues or memory leaks, therefor using delegation or modern frameworks can rationalise event management and consequently mitigate drawbacks.
-https://www.w3schools.com/js/js_events.asp
-https://www.javascripttutorial.net/javascript-dom/handling-events-in-javascript/
-https://devblogs.microsoft.com/visualstudio/unlocking-the-secrets-of-managed-memory-dive-into-event-handler-leak-insights/
+In web application development this feature is particularly useful as it addresses the need for concise and maintainable code, especially component based arcetectures like React as developers can write more intuitive code which fits with React's declarative programming model.
+https://egghead.io/blog/wtf-is-declarative-programming
+https://www.educative.io/answers/what-is-declarative-programming-in-react
 
-### Dynamic Typing
 
-In JavaScript, dynamic typing means that the variable data types are determined at runtime which allows variables to hold any type of data and to change types during execution. This flexibility allows for rapid development and ease of scripting for varied and complex functionalities.
+
+### Functions as First-Class Citizens
+
+Javascript treats funcutions as first-class citizens which means they can be assigned to variables, passed as arguments, and returned from other functions. This enables complex event handling, and functional programming techniques which enhances the flexibility of code.
+https://www.geeksforgeeks.org/what-is-the-first-class-function-in-javascript/
 
 `react_client/src/...`
-```JavaScript
+```Javascript
+const Form = () => {
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+        {/*...*/}
+    );
 ```
 
-While dynamic typing enables flexibility, it can lead to unexpected bugs if the variables change types by mistake. To mitigate this, using a static typing language such as TypeScript or implement precise type-checking and testing practices in JavaScript will reduce the errors which may occur due to dynamic typing.
-https://medium.com/@easyexpresssoft/dynamic-typing-coercion-and-operators-a8986be8c198
-https://stackoverflow.com/questions/1517582/what-is-the-difference-between-statically-typed-and-dynamically-typed-languages
-
+When developing web applications in Javascript this ability to pass functions as parameters streamlines event handling and asynchronous operations, leading to succinct and code patterns and enables dynamic UI interactions and server comunication in React.
+https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function
+https://medium.com/@rabailzaheer/first-class-and-higher-order-functions-86d14e40c688
 
 
 Conclusions
 -----------
+In conclusion, as justified above the prototype `example_server` and `example_client` show that they are unfit for a buisness application with its major defencies. To enhance the robustness and scaleability of the application I would recommend transitioning to more robust and established frameworks, such as, Falcon for the server side and React for the client side. The use of frameworks will also lead to faster development cycles, better code quality, and easier maintenance. Additionally, since these suggested frameworks are established they come with extentive documentation which is extreamely useful for not only streamlining development process but also industry standardising the application which will not only ensure its longevity and adaptability to the technological evolution but will also mean there are a larger quantity of developers that could be employeed to improve and maintain the application. 
 
-(justify why frameworks are recommended - 120ish words)
-(justify which frameworks should be used and why 180ish words)
+The suggested frameworks to be used are:
+- **Falcon** - Chosen for the server side of the application due to it being ideal for developing lightweight APIs as it is highly efficient in handeling HTTP requests and its simplistic  which promotes quick development and easy understanding which is essential in a fast-paced business environment.
